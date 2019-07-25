@@ -1,20 +1,15 @@
-# OpenLayers + Webpack
+# ol-webpack
 
-This example demonstrates how the `ol` package can be used with webpack.
+下载之后运行  
+ 
+``npm install``
 
-Clone the project.
+``npm start``
 
-    git clone git@github.com:openlayers/ol-webpack.git
+popup 实例
 
-Install the project dependencies.
+![](images/1564035475266.jpg)
 
-    cd ol-webpack
-    npm install
+测量距离、面积，标点实例
 
-Create a bundle for the browser.
-
-    npm run build
-
-Open `index.html` to see the result.
-
-    open index.html
+![](images/measure.png)
