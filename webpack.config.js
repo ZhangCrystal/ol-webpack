@@ -29,7 +29,15 @@ module.exports = {
                         presets: ['@babel/preset-env','@babel/preset-react'],
                         plugins: ['@babel/plugin-proposal-class-properties']
                     }
-                }}
+                }
+            },
+            {
+                test: /\.(gif|jpg|jpeg|png|woff|svg|eot|ttf)\??.*$/,
+                loader: 'url-loader?limit=1000&name=[hash:8]-[name].[ext]',
+            }, {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'file-loader?name=[hash:8]-[name].[ext]',
+            }
         ]
     },
     plugins: [

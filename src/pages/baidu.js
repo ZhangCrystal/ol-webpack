@@ -7,7 +7,7 @@ import TileImage from 'ol/source/TileImage';
 import {fromLonLat,transform,Projection,addProjection,addCoordinateTransforms} from 'ol/proj';
 import projzh from 'projzh';
 import {applyTransform} from 'ol/extent';
-import XYZ from 'ol/source/XYZ';
+import {OSM,XYZ} from 'ol/source'
 import sphericalMercator from '../utils/tools'
 
 class Baidu extends Component{
@@ -27,7 +27,7 @@ class Baidu extends Component{
 
         addProjection(baiduMercator);
         addCoordinateTransforms('EPSG:4326', baiduMercator, projzh.ll2bmerc, projzh.bmerc2ll);
-        addCoordinateTransforms('EPSG:3857', baiduMercator, projzh.smerc2bmerc, projzh.bmerc2smerc);
+        // addCoordinateTransforms('EPSG:3857', baiduMercator, projzh.smerc2bmerc, projzh.bmerc2smerc);
 
         var bmercResolutions = new Array(19);
         for (var i = 0; i < 19; ++i) {
@@ -51,14 +51,21 @@ class Baidu extends Component{
                     var hash = (x << z) + y;
                     var index = hash % urls.length;
                     index = index < 0 ? index + urls.length : index;
+
+                    // 百度瓦片服务url将负数使用M前缀来标识
+                    if(x<0){
+                        x = "M"+(-x);
+                    } if(y<0) {
+                        y = "M" + (-y);
+                    }
                     return urls[index].replace('{x}', x).replace('{y}', y).replace('{z}', z);
                 },
                 tileGrid: new TileGrid({
-                    resolutions: bmercResolutions,
-                    origin: [0, 0],
+                    resolutions: bmercResolutions,// 设置分辨率
+                    origin: [0, 0],// 设置原点坐标
                     // extent: applyTransform(extent, projzh.ll2bmerc),
                     tileSize: [256, 256]
-                })
+                }),
             })
         });
         // // 自定义分辨率和瓦片坐标系
@@ -100,16 +107,24 @@ class Baidu extends Component{
         //     source: baiduSource
         // });
         //
+
+        var raster = new TileLayer({
+            source: new OSM()
+        });
+
         // 创建地图
+
         var map=new Map({
             layers: [
                 // baiduMapLayer2
+                // raster,
                 baidu
             ],
             view: new View({
                 // 设置成都为地图中心
                 center: transform([104.06, 30.67], 'EPSG:4326', 'EPSG:3857'),
-                zoom: 10,
+                zoom: 3,
+                minZoom:3
             }),
             target: 'baiduMap2'
         });
@@ -119,7 +134,7 @@ class Baidu extends Component{
     render(){
 
         return(
-            <div id="baiduMap2" style={{width: '100%'}}></div>
+            <div id="baiduMap2" style={{width: '100%'}}/>
         )
     }
 

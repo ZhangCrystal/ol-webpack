@@ -109,6 +109,7 @@ class Measure extends Component{
          this.draw = new Draw({
              source: this.vector.getSource(),
              type:select,
+             // freehand: true,  //是否是直线
              style: new Style({
                  fill: new Fill({
                    color: 'rgba(255, 255, 255, 0.2)'
